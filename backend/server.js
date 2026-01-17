@@ -1,132 +1,91 @@
-// ====================================================================
-// MK NAILS BACKEND - server.js
-// Main Express server file
-// ====================================================================
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pg = require('pg');
-
-// Import route files (we'll create these next)
-// const authRoutes = require('./routes/auth');
-// const bookingRoutes = require('./routes/bookings');
-// const serviceRoutes = require('./routes/services');
-// const reviewRoutes = require('./routes/reviews');
-// const adminRoutes = require('./routes/admin');
+const { Pool } = require('pg');
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// ====================================================================
-// MIDDLEWARE (What happens before every request)
-// ====================================================================
-
-// Allow frontend to talk to backend
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}));
-
-// Parse JSON from requests
-app.use(express.json());
-
-// Log all requests (helpful for debugging)
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
-  next();
-});
-
-// ====================================================================
-// DATABASE CONNECTION
-// ====================================================================
-
-const pool = new pg.Pool({
+// ==================== DATABASE CONNECTION ====================
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
-// Test connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('❌ Database connection failed:', err);
-  } else {
-    console.log('✅ Database connected at:', res.rows[0].now);
+pool.on('connect', () => {
+  console.log('✅ Database connected at:', new Date().toISOString());
+});
+
+pool.on('error', (err) => {
+  console.error('❌ Database error:', err);
+});
+
+// ==================== MIDDLEWARE ====================
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ==================== HEALTH CHECK ====================
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
+// ==================== SERVICES ROUTE ====================
+app.get('/api/services', async (req, res) => {
+  console.log('\n🔍 GET /api/services called');
+  try {
+    console.log('📊 Querying database...');
+    const result = await pool.query(
+      'SELECT id, name, description, price, duration_minutes, category FROM services ORDER BY display_order'
+    );
+    console.log('✅ Query successful! Found', result.rows.length, 'services');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch services', details: err.message });
   }
 });
 
-// Make pool available to other files
-app.locals.db = pool;
-
-// ====================================================================
-// ROUTES (We'll add these once structure is ready)
-// ====================================================================
-
-// auth routes (login, register)
-// app.use('/api/auth', authRoutes);
-
-// booking routes (create, view, update bookings)
-// app.use('/api/bookings', bookingRoutes);
-
-// service routes (get services, prices)
-// app.use('/api/services', serviceRoutes);
-
-// review routes (submit, get, moderate reviews)
-// app.use('/api/reviews', reviewRoutes);
-
-// admin routes (dashboard data)
-// app.use('/api/admin', adminRoutes);
-
-// ====================================================================
-// HEALTH CHECK ENDPOINT
-// ====================================================================
-
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+// ==================== BOOKINGS ROUTE ====================
+app.get('/api/bookings', async (req, res) => {
+  console.log('\n🔍 GET /api/bookings called');
+  try {
+    console.log('📊 Querying database...');
+    const result = await pool.query(
+      `SELECT b.id, b.booking_date, b.start_time, b.status,
+              s.name as service_name, s.price
+       FROM bookings b
+       JOIN services s ON b.service_id = s.id
+       ORDER BY b.booking_date DESC
+       LIMIT 10`
+    );
+    console.log('✅ Query successful! Found', result.rows.length, 'bookings');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch bookings', details: err.message });
+  }
 });
 
-// ====================================================================
-// ERROR HANDLING
-// ====================================================================
-
-// 404 - Not found
-app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
-
-// Global error handler
+// ==================== ERROR HANDLING ====================
 app.use((err, req, res, next) => {
-  console.error('❌ Error:', err.message);
-  res.status(err.status || 500).json({ 
-    error: err.message || 'Internal server error' 
-  });
+  console.error('Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
-// ====================================================================
-// START SERVER
-// ====================================================================
-
-const PORT = process.env.PORT || 5000;
-
+// ==================== START SERVER ====================
 app.listen(PORT, () => {
-  console.log(`
-╔════════════════════════════════════════╗
-║  MK NAILS BACKEND                      ║
-║  Running on port ${PORT}                  ║
-║  Environment: ${process.env.NODE_ENV || 'development'}           ║
-║  Frontend: ${process.env.FRONTEND_URL || 'http://localhost:5173'} ║
-╚════════════════════════════════════════╝
-  `);
+  console.log('\n╔════════════════════════════════════╗');
+  console.log('║   MK NAILS BACKEND - DAY 2         ║');
+  console.log('╚════════════════════════════════════╝');
+  console.log(`✅ Running on port ${PORT}`);
+  console.log(`🔗 Health: http://localhost:${PORT}/api/health`);
+  console.log(`🔗 Services: http://localhost:${PORT}/api/services`);
+  console.log(`🔗 Bookings: http://localhost:${PORT}/api/bookings`);
+  console.log('');
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('Closing database connection...');
-  pool.end();
-  process.exit(0);
-});
-
-module.exports = { app, pool };
+module.exports = app;
