@@ -1,112 +1,93 @@
 {
   "business": {
     "name": "MK Nails",
-    "tagline": "Hola Bonita - Where Beauty Meets Care",
-    "description": "Premium nail salon specializing in professional manicures, custom nail art, and spa treatments",
-    "phone": "(561) 555-0123",
-    "email": "hello@mknails.com",
-    "address": "Atlantis, Florida",
-    "fullAddress": "123 Your Street, Atlantis, FL 33139",
+    "tagline": "Soft, bold nails for women who know what they want.",
+    "description": "Hi 👋 my name is Maria Ortega. I am a certified nail technician with 10 years of experience, passionate about creating nails that make you feel confident and cared for.",
+    "phone": "(786) 380-3671",
+    "email": "bookings@mknails.com",
+    "address": "Cutler Bay, Florida",
+    "fullAddress": "19800 S Dixie Hwy suite 9, Cutler Bay, Florida 33157",
     "website": "https://jony277.github.io/MKNails/"
   },
   "hours": {
-    "monday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
-    "tuesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
-    "wednesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
-    "thursday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
-    "friday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
-    "saturday": { "open": "10:00 AM", "close": "6:00 PM", "open24": false },
-    "sunday": { "open": "12:00 PM", "close": "5:00 PM", "open24": false },
+    "monday": { "open": "TBD", "close": "TBD", "open24": false },
+    "tuesday": { "open": "TBD", "close": "TBD", "open24": false },
+    "wednesday": { "open": "TBD", "close": "TBD", "open24": false },
+    "thursday": { "open": "TBD", "close": "TBD", "open24": false },
+    "friday": { "open": "TBD", "close": "TBD", "open24": false },
+    "saturday": { "open": "TBD", "close": "TBD", "open24": false },
+    "sunday": { "open": "TBD", "close": "TBD", "open24": false },
     "holidays": []
   },
   "services": [
     {
       "id": "classic-manicure",
       "name": "Classic Manicure",
-      "description": "Timeless elegance with professional polish and care",
+      "description": "Cuticle care, shaping, and a classic polish finish.",
       "price": 19,
       "duration": 25,
       "icon": "💎",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/3997385/pexels-photo-3997385.jpeg",
       "category": "Hands & Feet"
     },
     {
       "id": "gel-manicure",
       "name": "Gel Manicure",
-      "description": "Long-lasting color that shines for weeks",
+      "description": "Long-lasting gel color with a glossy, chip-resistant finish.",
       "price": 35,
       "duration": 40,
       "icon": "✨",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/3997389/pexels-photo-3997389.jpeg",
       "category": "Hands & Feet"
     },
     {
       "id": "nail-art",
       "name": "Nail Art",
-      "description": "Custom designs that express your unique personality",
+      "description": "Custom designs from minimal to statement looks, tailored to you.",
       "price": 45,
       "duration": 60,
       "icon": "🎨",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/5240694/pexels-photo-5240694.jpeg",
       "category": "Design & Art"
     },
     {
       "id": "spa-manicure",
       "name": "Spa Manicure",
-      "description": "Luxurious pampering with hand treatments",
+      "description": "Luxurious soak, scrub, massage, and mask for tired hands.",
       "price": 45,
       "duration": 60,
       "icon": "💄",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/3738341/pexels-photo-3738341.jpeg",
       "category": "Wellness & Spa"
     },
     {
       "id": "hard-gel-full-set",
       "name": "Hard Gel Full Set",
-      "description": "Durable, beautiful extensions that last",
+      "description": "Durable, sculpted extensions with your choice of shape and length.",
       "price": 85,
       "duration": 120,
       "icon": "👑",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/3997377/pexels-photo-3997377.jpeg",
       "category": "Hands & Feet"
     },
     {
       "id": "add-on-services",
       "name": "Add-On Services",
-      "description": "Enhance your service with extras like treatments",
+      "description": "Extras like nail repair, French tips, chrome, and more.",
       "price": 11,
       "priceMax": 24,
       "duration": 15,
       "icon": "🧴",
-      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "image": "https://images.pexels.com/photos/3738366/pexels-photo-3738366.jpeg",
       "category": "Paint Packages"
     }
   ],
-  "testimonials": [
-    {
-      "name": "Maria García",
-      "text": "Every time I leave MK Nails, I feel like a new person. The care and attention is incredible!",
-      "rating": 5,
-      "image": "https://i.pravatar.cc/150?img=1"
-    },
-    {
-      "name": "Sarah Johnson",
-      "text": "The nail art is phenomenal! My nails always turn heads and last so long.",
-      "rating": 5,
-      "image": "https://i.pravatar.cc/150?img=2"
-    },
-    {
-      "name": "Jessica Lee",
-      "text": "Best salon experience ever. The team made me feel so welcomed and beautiful!",
-      "rating": 5,
-      "image": "https://i.pravatar.cc/150?img=3"
-    }
-  ],
+  "testimonials": [],
   "social": {
-    "instagram": "https://instagram.com",
-    "facebook": "https://facebook.com",
-    "tiktok": "https://tiktok.com",
-    "whatsapp": "https://wa.me/15615550123"
+    "instagram": "https://www.instagram.com/mk_nails_23/",
+    "facebook": "",
+    "tiktok": "",
+    "whatsapp": ""
   },
   "colors": {
     "primary": "#F5B4C8",
@@ -121,22 +102,22 @@
   },
   "booking": {
     "enabled": true,
-    "platform": "calendly",
-    "url": "https://calendly.com/your-booking-link",
+    "platform": "internal",
+    "url": "#booking",
     "minAdvanceBooking": 24,
     "maxAdvanceBooking": 90
   },
   "notifications": {
     "emailNotifications": true,
     "smsNotifications": false,
-    "whatsappNotifications": true
+    "whatsappNotifications": false
   },
   "features": {
-    "showTestimonials": true,
+    "showTestimonials": false,
     "showGallery": true,
-    "showAvailability": true,
+    "showAvailability": false,
     "showMap": false,
     "showChat": false,
-    "enableSearch": true
+    "enableSearch": false
   }
 }
