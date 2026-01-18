@@ -7,6 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 function BookingsPanel() {
   const { theme } = useTheme();
   const [bookings, setBookings] = useState([]);
+  const [allBookings, setAllBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
@@ -17,18 +18,20 @@ function BookingsPanel() {
 
   useEffect(() => {
     fetchBookings();
-  }, [filters]);
+  }, []);
+
+  // Apply filters whenever they change
+  useEffect(() => {
+    applyFilters();
+  }, [filters, allBookings]);
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A';
     try {
-      // Handle ISO string like "2026-01-23T05:00:00.000Z" or date string "2026-01-23"
       let dateObj;
       if (typeof dateStr === 'string' && dateStr.includes('T')) {
-        // ISO string - parse and extract just the date part
         dateObj = new Date(dateStr);
       } else {
-        // Date string "2026-01-23" - parse as UTC
         dateObj = new Date(dateStr + 'T00:00:00Z');
       }
       
@@ -66,23 +69,11 @@ function BookingsPanel() {
         return;
       }
 
-      // Build query params
-      const params = new URLSearchParams();
-      if (filters.status && filters.status !== 'all') {
-        params.append('status', filters.status);
-      }
-      if (filters.dateFrom) {
-        params.append('dateFrom', filters.dateFrom);
-      }
-      if (filters.dateTo) {
-        params.append('dateTo', filters.dateTo);
-      }
-
-      const res = await client.get(`/api/admin/bookings?${params}`, {
+      const res = await client.get('/api/admin/bookings', {
         'Authorization': `Bearer ${token}`
       });
 
-      setBookings(res.data || []);
+      setAllBookings(res.data || []);
       setError('');
     } catch (err) {
       console.error('Bookings fetch error:', err);
@@ -92,8 +83,52 @@ function BookingsPanel() {
     }
   };
 
+  const applyFilters = () => {
+    let filtered = [...allBookings];
+
+    // Filter by status
+    if (filters.status && filters.status !== 'all') {
+      filtered = filtered.filter(b => b.status === filters.status);
+    }
+
+    // Filter by date from
+    if (filters.dateFrom) {
+      const dateFromObj = new Date(filters.dateFrom + 'T00:00:00Z');
+      filtered = filtered.filter(b => {
+        const bookingDate = new Date(b.booking_date + 'T00:00:00Z');
+        return bookingDate >= dateFromObj;
+      });
+    }
+
+    // Filter by date to
+    if (filters.dateTo) {
+      const dateToObj = new Date(filters.dateTo + 'T23:59:59Z');
+      filtered = filtered.filter(b => {
+        const bookingDate = new Date(b.booking_date + 'T00:00:00Z');
+        return bookingDate <= dateToObj;
+      });
+    }
+
+    setBookings(filtered);
+  };
+
   const handleRefresh = () => {
     fetchBookings();
+  };
+
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      status: 'all',
+      dateFrom: '',
+      dateTo: '',
+    });
   };
 
   if (loading) {
@@ -102,7 +137,7 @@ function BookingsPanel() {
         <div className="inline-block">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
         </div>
-        <p className="text-gray-500 dark:text-gray-400 mt-3">Loading bookings...</p>
+        <p className="text-gray-600 dark:text-gray-300 mt-3">Loading bookings...</p>
       </div>
     );
   }
@@ -113,7 +148,7 @@ function BookingsPanel() {
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Bookings</h2>
         <button
           onClick={handleRefresh}
-          className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-medium transition flex items-center gap-2"
+          className="px-4 py-2 bg-pink-500 hover:bg-pink-600 dark:bg-pink-600 dark:hover:bg-pink-700 text-white rounded-lg font-medium transition flex items-center gap-2"
         >
           <span>🔄</span> Refresh
         </button>
@@ -126,58 +161,92 @@ function BookingsPanel() {
       )}
 
       {/* Filters */}
-      <div className="mb-6 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
-          <select
-            value={filters.status}
-            onChange={(e) => setFilters({...filters, status: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500"
-          >
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+      <div className="mb-6 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Filters</h3>
+          {(filters.status !== 'all' || filters.dateFrom || filters.dateTo) && (
+            <button
+              onClick={clearFilters}
+              className="text-xs text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium"
+            >
+              Clear All
+            </button>
+          )}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date From</label>
-          <input
-            type="date"
-            value={filters.dateFrom}
-            onChange={(e) => setFilters({...filters, dateFrom: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date To</label>
-          <input
-            type="date"
-            value={filters.dateTo}
-            onChange={(e) => setFilters({...filters, dateTo: e.target.value})}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Status
+            </label>
+            <select
+              value={filters.status}
+              onChange={(e) => handleFilterChange('status', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+            >
+              <option value="all">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date From
+            </label>
+            <input
+              type="date"
+              value={filters.dateFrom}
+              onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Date To
+            </label>
+            <input
+              type="date"
+              value={filters.dateTo}
+              onChange={(e) => handleFilterChange('dateTo', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+            />
+          </div>
         </div>
       </div>
 
       {/* Table Wrapper with proper scrollbar handling */}
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
+        <table className="w-full border-collapse bg-white dark:bg-gray-800">
           <thead>
             <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Date</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Time</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Customer</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Service</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Price</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Date
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Time
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Customer
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Service
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Price
+              </th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
             {bookings.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                <td
+                  colSpan="6"
+                  className="px-6 py-8 text-center text-gray-600 dark:text-gray-400"
+                >
                   No bookings found
                 </td>
               </tr>
@@ -204,7 +273,7 @@ function BookingsPanel() {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
                         booking.status === 'confirmed'
                           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200'
                           : booking.status === 'completed'
@@ -225,7 +294,7 @@ function BookingsPanel() {
       </div>
 
       <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-        Total: {bookings.length} bookings
+        Showing {bookings.length} of {allBookings.length} bookings
       </div>
     </div>
   );
