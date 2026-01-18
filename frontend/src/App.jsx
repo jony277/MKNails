@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-
 function App() {
   const [selectedService, setSelectedService] = useState(null)
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
   const [bookingStep, setBookingStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   const services = [
     { id: 1, name: 'Manicure', price: 25, duration: '30 min', icon: '💅' },
@@ -18,10 +18,61 @@ function App() {
 
   const timeSlots = ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM']
 
-  const handleBook = () => {
+  // Convert time to 24-hour format for database
+  const convertTo24Hour = (time12) => {
+    const [time, period] = time12.split(' ')
+    let [hours, minutes] = time.split(':')
+    hours = parseInt(hours)
+    if (period === 'PM' && hours !== 12) hours += 12
+    if (period === 'AM' && hours === 12) hours = 0
+    return `${String(hours).padStart(2, '0')}:${minutes}:00`
+  }
+
+  const handleBook = async () => {
     if (selectedService && selectedDate && selectedTime) {
-      console.log('Booking confirmed:', { selectedService, selectedDate, selectedTime })
-      alert(`Booking confirmed for ${selectedService.name} on ${selectedDate} at ${selectedTime}`)
+      setIsLoading(true)
+      try {
+        const time24 = convertTo24Hour(selectedTime)
+
+        console.log('🚀 Sending booking to backend:', { 
+          service_id: selectedService.id, 
+          booking_date: selectedDate, 
+          start_time: time24 
+        })
+        
+        const response = await fetch('http://localhost:5000/api/bookings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            service_id: selectedService.id,
+            booking_date: selectedDate,
+            start_time: time24,
+            customer_name: 'Walk-in Guest',
+            customer_phone: '(000) 000-0000',
+            special_requests: 'None',
+          }),
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          alert(`✅ Booking Confirmed!\n\nService: ${selectedService.name}\nDate: ${selectedDate}\nTime: ${selectedTime}\n\nBooking ID: ${data.id}\n\nYou'll receive an SMS confirmation shortly!`)
+          // Reset form
+          setSelectedService(null)
+          setSelectedDate('')
+          setSelectedTime('')
+          setBookingStep(1)
+        } else {
+          alert(`❌ Booking Failed\n\n${data.error || 'Please try again'}`)
+        }
+      } catch (error) {
+        console.error('Booking error:', error)
+        alert(`❌ Error: ${error.message}\n\nMake sure the backend server is running on port 5000`)
+      } finally {
+        setIsLoading(false)
+      }
     }
   }
 
@@ -146,14 +197,14 @@ function App() {
                   {/* CTA */}
                   <button
                     onClick={handleBook}
-                    disabled={!selectedDate || !selectedTime}
+                    disabled={!selectedDate || !selectedTime || isLoading}
                     className={`w-full py-3 rounded-lg font-semibold transition-all ${
-                      selectedDate && selectedTime
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-2xl hover:shadow-pink-500/50 text-white'
+                      selectedDate && selectedTime && !isLoading
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 hover:shadow-2xl hover:shadow-pink-500/50 text-white cursor-pointer'
                         : 'bg-slate-700/50 text-gray-500 cursor-not-allowed'
                     }`}
                   >
-                    {selectedDate && selectedTime ? 'Confirm Booking' : 'Select date & time'}
+                    {isLoading ? 'Processing...' : selectedDate && selectedTime ? 'Confirm Booking' : 'Select date & time'}
                   </button>
 
                   <p className="text-xs text-gray-500 text-center">Confirmation via SMS</p>
