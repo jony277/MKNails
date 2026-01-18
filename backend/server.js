@@ -366,6 +366,93 @@ app.get('/api/availability', async (req, res) => {
   }
 });
 
+// ==================== ADMIN SERVICES CRUD (PROTECTED) ====================
+app.get('/api/admin/services', authMiddleware, async (req, res) => {
+  console.log('\n🔐 GET /api/admin/services (PROTECTED) called by:', req.user.email);
+  try {
+    console.log('📊 Querying services...');
+    const result = await pool.query(
+      'SELECT id, name, description, price, duration_minutes FROM services ORDER BY id'
+    );
+    console.log('✅ Query successful! Found', result.rows.length, 'services');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch services', details: err.message });
+  }
+});
+
+app.post('/api/admin/services', authMiddleware, async (req, res) => {
+  console.log('\n📝 POST /api/admin/services (PROTECTED) called by:', req.user.email);
+  try {
+    const { name, description, price, duration } = req.body;
+
+    if (!name || !price || !duration) {
+      return res.status(400).json({ error: 'Missing required fields: name, price, duration' });
+    }
+
+    console.log('Creating service:', { name, price, duration });
+    const result = await pool.query(
+      'INSERT INTO services (name, description, price, duration_minutes) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, description || '', parseFloat(price), parseInt(duration)]
+    );
+    console.log('✅ Service created! ID:', result.rows[0].id);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to create service', details: err.message });
+  }
+});
+
+app.put('/api/admin/services/:id', authMiddleware, async (req, res) => {
+  console.log('\n✏️ PUT /api/admin/services/:id (PROTECTED) called by:', req.user.email);
+  try {
+    const { id } = req.params;
+    const { name, description, price, duration } = req.body;
+
+    if (!name || !price || !duration) {
+      return res.status(400).json({ error: 'Missing required fields: name, price, duration' });
+    }
+
+    console.log('Updating service ID:', id);
+    const result = await pool.query(
+      'UPDATE services SET name=$1, description=$2, price=$3, duration_minutes=$4 WHERE id=$5 RETURNING *',
+      [name, description || '', parseFloat(price), parseInt(duration), id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    console.log('✅ Service updated! ID:', id);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to update service', details: err.message });
+  }
+});
+
+app.delete('/api/admin/services/:id', authMiddleware, async (req, res) => {
+  console.log('\n🗑️ DELETE /api/admin/services/:id (PROTECTED) called by:', req.user.email);
+  try {
+    const { id } = req.params;
+
+    console.log('Deleting service ID:', id);
+    const result = await pool.query('DELETE FROM services WHERE id=$1 RETURNING id', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    console.log('✅ Service deleted! ID:', id);
+    res.json({ message: 'Service deleted', id });
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to delete service', details: err.message });
+  }
+});
+
+
 // ==================== ERROR HANDLING ====================
 app.use((err, req, res, next) => {
   console.error('❌ Unhandled Error:', err);
