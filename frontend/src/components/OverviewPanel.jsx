@@ -40,8 +40,19 @@ function OverviewPanel() {
     try {
       setLoading(true);
 
-      // Call the dashboard endpoint we added in server.js
-      const res = await client.get('/api/admin/dashboard');
+      // Get token from localStorage
+      const token = localStorage.getItem('adminToken');
+      console.log('Token available:', !!token);
+
+      if (!token) {
+        setError('No authentication token. Please log in.');
+        return;
+      }
+
+      // Call the dashboard endpoint with auth header
+      const res = await client.get('/api/admin/dashboard', {
+        'Authorization': `Bearer ${token}`
+      });
       const data = res.data || {};
 
       // For now we keep revenueByDay empty (can compute later from bookings)
@@ -58,7 +69,7 @@ function OverviewPanel() {
       setError('');
     } catch (err) {
       console.error('Dashboard error:', err);
-      setError('Failed to load dashboard');
+      setError('Failed to load dashboard: ' + (err.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
