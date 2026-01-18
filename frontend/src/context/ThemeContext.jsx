@@ -4,8 +4,8 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Get saved theme from localStorage or default to 'auto'
-    return localStorage.getItem('theme') || 'auto';
+    // Get saved theme from localStorage or default to 'dark' (you want dark theme)
+    return localStorage.getItem('theme') || 'dark';
   });
 
   // Determine actual theme (light or dark)
@@ -22,6 +22,9 @@ export const ThemeProvider = ({ children }) => {
   // Apply theme to document
   useEffect(() => {
     const root = document.documentElement;
+    
+    // Remove both classes first
+    root.classList.remove('dark', 'light');
     
     if (actualTheme === 'dark') {
       root.classList.add('dark');
@@ -41,10 +44,8 @@ export const ThemeProvider = ({ children }) => {
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
-      // Force re-render by triggering theme update
       const root = document.documentElement;
-      const isDark = mediaQuery.matches;
-      if (isDark) {
+      if (mediaQuery.matches) {
         root.classList.add('dark');
         root.setAttribute('data-color-scheme', 'dark');
       } else {
