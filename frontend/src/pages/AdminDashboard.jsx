@@ -73,7 +73,7 @@ const AdminDashboard = () => {
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-black/30 border-b border-purple-500/20">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <span className="text-3xl💅💅</span>
+            <span className="text-3xl">💅</span>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">MK Nails Admin</h1>
           </Link>
           <button
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
                 <p className="text-gray-400 text-sm mb-2">Total Bookings</p>
                 <p className="text-4xl font-bold text-pink-400">{stats.total}</p>
               </div>
-              <div className="text-4xl📅</div>
+              <div className="text-4xl">📅</div>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
                 <p className="text-gray-400 text-sm mb-2">Today's Appointments</p>
                 <p className="text-4xl font-bold text-purple-400">{stats.today}</p>
               </div>
-              <div className="text-4xl📈</div>
+              <div className="text-4xl">📈</div>
             </div>
           </div>
 
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
                 <p className="text-gray-400 text-sm mb-2">Revenue (Bookings)</p>
                 <p className="text-4xl font-bold text-emerald-400">${stats.revenue.toFixed(2)}</p>
               </div>
-              <div className="text-4xl💳</div>
+              <div className="text-4xl">💳</div>
             </div>
           </div>
         </div>
