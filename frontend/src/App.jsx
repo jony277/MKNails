@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import AdminLogin from './pages/AdminLogin'
+import AdminDashboard from './pages/AdminDashboard'
 
-function App() {
+function HomePage() {
   const [selectedService, setSelectedService] = useState(null)
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
@@ -18,7 +21,6 @@ function App() {
 
   const timeSlots = ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM']
 
-  // Convert time to 24-hour format for database
   const convertTo24Hour = (time12) => {
     const [time, period] = time12.split(' ')
     let [hours, minutes] = time.split(':')
@@ -59,7 +61,6 @@ function App() {
 
         if (response.ok) {
           alert(`✅ Booking Confirmed!\n\nService: ${selectedService.name}\nDate: ${selectedDate}\nTime: ${selectedTime}\n\nBooking ID: ${data.id}\n\nYou'll receive an SMS confirmation shortly!`)
-          // Reset form
           setSelectedService(null)
           setSelectedDate('')
           setSelectedTime('')
@@ -243,6 +244,18 @@ function App() {
         </div>
       </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +27,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ==================== AUTH MIDDLEWARE ====================
+const authMiddleware = function(req, res, next) {
+  try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+
+    next();
+  } catch (err) {
+    console.error('Auth middleware error:', err.message);
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
+};
+
 // ==================== HEALTH CHECK ====================
 app.get('/api/health', (req, res) => {
   res.json({
@@ -31,6 +54,64 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
   });
+});
+// ==================== AUTH LOGIN ROUTE ====================
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    // Find admin user
+    const result = await pool.query(
+      'SELECT id, email, password_hash, full_name, role, is_active FROM admin_users WHERE email = $1',
+      [email]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const user = result.rows[0];
+
+    if (!user.is_active) {
+      return res.status(403).json({ message: 'Account is inactive' });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    console.log('✅ Admin login successful:', email);
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.full_name,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // ==================== SERVICES ROUTE ====================
@@ -166,6 +247,29 @@ app.post('/api/bookings', async (req, res) => {
     console.error('❌ POST Error:', err.message);
     console.error('Full error:', err);
     res.status(500).json({ error: 'Failed to create booking', details: err.message });
+  }
+});
+
+// ==================== ADMIN BOOKINGS GET ROUTE (PROTECTED) ====================
+app.get('/api/admin/bookings', authMiddleware, async (req, res) => {
+  console.log('\n🔐 GET /api/admin/bookings (PROTECTED) called by:', req.user.email);
+  try {
+    console.log('📊 Querying bookings...');
+    const result = await pool.query(
+      `SELECT b.id, b.booking_date, b.start_time, b.end_time, b.status,
+              s.name as service_name, s.price,
+              c.first_name, c.phone_number
+       FROM bookings b
+       JOIN services s ON b.service_id = s.id
+       JOIN customers c ON b.customer_id = c.id
+       ORDER BY b.booking_date DESC, b.start_time DESC
+       LIMIT 50`
+    );
+    console.log('✅ Query successful! Found', result.rows.length, 'bookings');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('❌ Database Error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch admin bookings', details: err.message });
   }
 });
 
