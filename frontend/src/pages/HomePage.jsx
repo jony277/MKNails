@@ -113,14 +113,13 @@ function HomePage() {
                 key={i}
                 className="sparkle-icon"
                 style={{
-                  '--delay': `${i * 0.4}s`,
                   width: '24px',
                   height: '24px',
                   animation: 'sparkleFloat 3.2s ease-in-out infinite',
                   animationDelay: `${i * 0.4}s`,
                   opacity: 0.8,
                   filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.8))',
-                } as any}
+                }}
               >
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
