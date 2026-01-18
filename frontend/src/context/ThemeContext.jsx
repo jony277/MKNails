@@ -3,67 +3,47 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // Get saved theme from localStorage or default to 'dark' (you want dark theme)
-    return localStorage.getItem('theme') || 'dark';
-  });
+  const [theme, setTheme] = useState('dark'); // Start with dark
+  const [mounted, setMounted] = useState(false);
 
-  // Determine actual theme (light or dark)
-  const getActualTheme = (selectedTheme) => {
-    if (selectedTheme === 'auto') {
-      // Check system preference
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-    return selectedTheme;
-  };
-
-  const actualTheme = getActualTheme(theme);
-
-  // Apply theme to document
+  // Initialize theme on mount
   useEffect(() => {
-    const root = document.documentElement;
+    // Get saved theme from localStorage
+    const saved = localStorage.getItem('theme-preference');
+    const initial = saved || 'dark';
     
-    // Remove both classes first
-    root.classList.remove('dark', 'light');
+    setTheme(initial);
+    applyTheme(initial);
+    setMounted(true);
+  }, []);
+
+  // Apply theme to DOM
+  const applyTheme = (newTheme) => {
+    const html = document.documentElement;
     
-    if (actualTheme === 'dark') {
-      root.classList.add('dark');
-      root.setAttribute('data-color-scheme', 'dark');
+    if (newTheme === 'dark') {
+      html.classList.add('dark');
     } else {
-      root.classList.remove('dark');
-      root.setAttribute('data-color-scheme', 'light');
+      html.classList.remove('dark');
     }
     
     // Save preference
-    localStorage.setItem('theme', theme);
-  }, [theme, actualTheme]);
-
-  // Listen to system preference changes when in auto mode
-  useEffect(() => {
-    if (theme !== 'auto') return;
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      const root = document.documentElement;
-      if (mediaQuery.matches) {
-        root.classList.add('dark');
-        root.setAttribute('data-color-scheme', 'dark');
-      } else {
-        root.classList.remove('dark');
-        root.setAttribute('data-color-scheme', 'light');
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [theme]);
-
-  const toggleTheme = (newTheme) => {
-    setTheme(newTheme);
+    localStorage.setItem('theme-preference', newTheme);
   };
 
+  // Toggle between light and dark
+  const toggleTheme = (newTheme) => {
+    setTheme(newTheme);
+    applyTheme(newTheme);
+  };
+
+  // Prevent flash by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, actualTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
