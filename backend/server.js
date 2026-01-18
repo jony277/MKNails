@@ -273,6 +273,78 @@ app.get('/api/admin/bookings', authMiddleware, async (req, res) => {
   }
 });
 
+// ==================== ADMIN DASHBOARD ROUTE (PROTECTED) ====================
+app.get('/api/admin/dashboard', authMiddleware, async (req, res) => {
+  console.log('\n🔐 GET /api/admin/dashboard (PROTECTED) called by:', req.user.email);
+  try {
+    // Total Bookings
+    const bookingsResult = await pool.query('SELECT COUNT(*) as total FROM bookings');
+    const totalBookings = parseInt(bookingsResult.rows[0]?.total || 0);
+
+    // Total Revenue
+    const revenueResult = await pool.query(`
+      SELECT SUM(s.price) as total 
+      FROM bookings b 
+      JOIN services s ON b.service_id = s.id
+      WHERE b.status IN ('confirmed', 'completed')
+    `);
+    const totalRevenue = parseFloat(revenueResult.rows[0]?.total || 0).toFixed(2);
+
+    // Total Services
+    const servicesResult = await pool.query('SELECT COUNT(*) as total FROM services');
+    const totalServices = parseInt(servicesResult.rows[0]?.total || 0);
+
+    // Total Customers (unique phone numbers)
+    const customersResult = await pool.query('SELECT COUNT(DISTINCT customer_id) as total FROM bookings');
+    const totalCustomers = parseInt(customersResult.rows[0]?.total || 0);
+
+    // Average per booking
+    const avgResult = await pool.query('SELECT AVG(s.price) as avg FROM bookings b JOIN services s ON b.service_id = s.id WHERE b.status IN (\'confirmed\', \'completed\')');
+    const avgPerBooking = parseFloat(avgResult.rows[0]?.avg || 0).toFixed(2);
+
+    // Recent bookings
+    const recentResult = await pool.query(`
+      SELECT b.id, b.booking_date, b.start_time, b.status, s.name as service_name, s.price
+      FROM bookings b 
+      JOIN services s ON b.service_id = s.id
+      ORDER BY b.booking_date DESC, b.start_time DESC
+      LIMIT 10
+    `);
+    const recentBookings = recentResult.rows;
+
+    // Top services
+    const topResult = await pool.query(`
+      SELECT s.name, COUNT(b.id) as bookings, SUM(s.price) as revenue
+      FROM bookings b 
+      JOIN services s ON b.service_id = s.id
+      WHERE b.status IN ('confirmed', 'completed')
+      GROUP BY s.id, s.name
+      ORDER BY revenue DESC
+      LIMIT 5
+    `);
+    const topServices = topResult.rows.map(row => ({
+      name: row.name,
+      bookings: row.bookings,
+      revenue: parseFloat(row.revenue || 0),
+    }));
+
+    console.log('✅ Dashboard data retrieved successfully');
+
+    res.json({
+      totalBookings,
+      totalRevenue: parseFloat(totalRevenue),
+      totalServices,
+      totalCustomers,
+      avgBooking: parseFloat(avgPerBooking),
+      recentBookings,
+      topServices,
+    });
+  } catch (error) {
+    console.error('❌ Dashboard error:', error);
+    res.status(500).json({ error: 'Failed to load dashboard' });
+  }
+});
+
 // ==================== AVAILABILITY ROUTE ====================
 app.get('/api/availability', async (req, res) => {
   console.log('\n🔍 GET /api/availability');
