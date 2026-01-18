@@ -20,7 +20,8 @@ export default function AdminDashboard() {
       const userStr = localStorage.getItem('adminUser');
       if (!userStr) return 'Admin';
       const user = JSON.parse(userStr);
-      return user.full_name || user.name || 'Admin';
+      // Try multiple field names (camelCase and snake_case)
+      return user.fullName || user.full_name || user.name || 'Admin';
     } catch (e) {
       return 'Admin';
     }
