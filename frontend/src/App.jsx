@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from './context/ThemeContext'
 import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 
@@ -249,13 +250,15 @@ function HomePage() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
