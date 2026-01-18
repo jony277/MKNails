@@ -3,19 +3,61 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('dark'); // Start with dark
+  const [theme, setTheme] = useState('light');
   const [mounted, setMounted] = useState(false);
+  const [auto, setAuto] = useState(true);
 
   // Initialize theme on mount
   useEffect(() => {
-    // Get saved theme from localStorage
+    // Get saved theme preference and auto setting
     const saved = localStorage.getItem('theme-preference');
-    const initial = saved || 'dark';
+    const savedAuto = localStorage.getItem('theme-auto');
     
-    setTheme(initial);
-    applyTheme(initial);
+    // If auto mode is enabled (or not set yet)
+    if (savedAuto !== 'false') {
+      setAuto(true);
+      // Use system preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        applyTheme('dark');
+        setTheme('dark');
+      } else {
+        applyTheme('light');
+        setTheme('light');
+      }
+      localStorage.setItem('theme-auto', 'true');
+    } else {
+      // Use saved preference
+      setAuto(false);
+      const initial = saved || 'light';
+      setTheme(initial);
+      applyTheme(initial);
+    }
+    
     setMounted(true);
   }, []);
+
+  // Listen for system theme changes when auto mode is on
+  useEffect(() => {
+    if (!auto || !mounted) return;
+    
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => {
+      const newTheme = e.matches ? 'dark' : 'light';
+      applyTheme(newTheme);
+      setTheme(newTheme);
+    };
+    
+    // Modern way
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+    // Fallback for older browsers
+    else if (mediaQuery.addListener) {
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
+  }, [auto, mounted]);
 
   // Apply theme to DOM
   const applyTheme = (newTheme) => {
@@ -33,8 +75,25 @@ export const ThemeProvider = ({ children }) => {
 
   // Toggle between light and dark
   const toggleTheme = (newTheme) => {
+    setAuto(false);
+    localStorage.setItem('theme-auto', 'false');
     setTheme(newTheme);
     applyTheme(newTheme);
+  };
+
+  // Enable auto mode
+  const enableAuto = () => {
+    setAuto(true);
+    localStorage.setItem('theme-auto', 'true');
+    
+    // Apply system preference immediately
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
+      setTheme('dark');
+    } else {
+      applyTheme('light');
+      setTheme('light');
+    }
   };
 
   // Prevent flash by not rendering until mounted
@@ -43,7 +102,7 @@ export const ThemeProvider = ({ children }) => {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, auto, enableAuto }}>
       {children}
     </ThemeContext.Provider>
   );
