@@ -60,6 +60,19 @@ function BookingsPanel() {
     }
   };
 
+  const parseBookingDate = (dateStr) => {
+    try {
+      if (!dateStr) return null;
+      // Handle ISO format or YYYY-MM-DD format
+      if (dateStr.includes('T')) {
+        return new Date(dateStr).toISOString().split('T')[0];
+      }
+      return dateStr;
+    } catch {
+      return null;
+    }
+  };
+
   const fetchBookings = async () => {
     try {
       setLoading(true);
@@ -93,19 +106,17 @@ function BookingsPanel() {
 
     // Filter by date from
     if (filters.dateFrom) {
-      const dateFromObj = new Date(filters.dateFrom + 'T00:00:00Z');
       filtered = filtered.filter(b => {
-        const bookingDate = new Date(b.booking_date + 'T00:00:00Z');
-        return bookingDate >= dateFromObj;
+        const bookingDate = parseBookingDate(b.booking_date);
+        return bookingDate && bookingDate >= filters.dateFrom;
       });
     }
 
     // Filter by date to
     if (filters.dateTo) {
-      const dateToObj = new Date(filters.dateTo + 'T23:59:59Z');
       filtered = filtered.filter(b => {
-        const bookingDate = new Date(b.booking_date + 'T00:00:00Z');
-        return bookingDate <= dateToObj;
+        const bookingDate = parseBookingDate(b.booking_date);
+        return bookingDate && bookingDate <= filters.dateTo;
       });
     }
 
@@ -215,38 +226,23 @@ function BookingsPanel() {
         </div>
       </div>
 
-      {/* Table Wrapper with proper scrollbar handling */}
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse bg-white dark:bg-gray-800">
+      {/* Table Wrapper */}
+      <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+        <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Date
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Time
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Customer
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Service
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Price
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                Status
-              </th>
+            <tr className="bg-gray-100 dark:bg-gray-700">
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Date</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Time</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Customer</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Service</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Price</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
             </tr>
           </thead>
           <tbody>
             {bookings.length === 0 ? (
               <tr>
-                <td
-                  colSpan="6"
-                  className="px-6 py-8 text-center text-gray-600 dark:text-gray-400"
-                >
+                <td colSpan="6" className="px-6 py-8 text-center text-gray-600 dark:text-gray-400">
                   No bookings found
                 </td>
               </tr>
@@ -254,7 +250,7 @@ function BookingsPanel() {
               bookings.map((booking) => (
                 <tr
                   key={booking.id}
-                  className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                  className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
                 >
                   <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100 whitespace-nowrap">
                     {formatDate(booking.booking_date)}
@@ -273,7 +269,7 @@ function BookingsPanel() {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
+                      className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap inline-block ${
                         booking.status === 'confirmed'
                           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-200'
                           : booking.status === 'completed'
