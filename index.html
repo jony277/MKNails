@@ -3,7 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MK Nails - Professional nail salon in Cutler Bay, Florida. Gel manicures, nail art, spa services by certified technician Maria Ortega. Book your beauty moment today!">
+    <meta name="keywords" content="nail salon, manicure, gel nails, nail art, Cutler Bay, Florida, professional nails">
+    <meta name="author" content="MK Nails">
+    <meta property="og:title" content="MK Nails - Hola Bonita | Professional Nail Salon in Cutler Bay">
+    <meta property="og:description" content="Soft, bold nails for women who know what they want. Certified nail technician with 10 years of experience.">
+    <meta property="og:type" content="business.business">
+    <meta property="og:url" content="https://jony277.github.io/MKNails/">
+    <meta name="theme-color" content="#F5B4C8">
     <title>MK Nails - Hola Bonita | Book Your Beauty Moment</title>
+    
+    <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "MK Nails",
+      "image": "https://jony277.github.io/MKNails/logo.png",
+      "description": "Professional nail salon with certified technician Maria Ortega",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "19800 S Dixie Hwy suite 9",
+        "addressLocality": "Cutler Bay",
+        "addressRegion": "FL",
+        "postalCode": "33157",
+        "addressCountry": "US"
+      },
+      "telephone": "(786) 380-3671",
+      "url": "https://jony277.github.io/MKNails/",
+      "sameAs": [
+        "https://www.instagram.com/mk_nails_23/",
+        "https://www.facebook.com/mknails.cutlerbay",
+        "https://www.tiktok.com/@mk_nails_23"
+      ],
+      "priceRange": "$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "250"
+      }
+    }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -89,6 +139,11 @@
             transform: translateY(-2px);
         }
 
+        .book-btn:focus {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
         /* ============================================
            HERO SECTION
            ============================================ */
@@ -145,6 +200,7 @@
             font-size: 28px;
             margin-bottom: 20px;
             animation: sparkle 2s ease-in-out infinite;
+            aria-hidden: "true";
         }
 
         @keyframes sparkle {
@@ -205,6 +261,11 @@
             background: #E099B0;
             box-shadow: 0 8px 24px rgba(245, 180, 200, 0.3);
             transform: translateY(-3px);
+        }
+
+        .hero-cta:focus {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
         }
 
         /* ============================================
@@ -283,6 +344,7 @@
         .category-icon {
             font-size: 48px;
             margin-bottom: 20px;
+            aria-hidden: "true";
         }
 
         .category-name {
@@ -410,6 +472,11 @@
             transform: scale(1.02);
         }
 
+        .service-btn:focus {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
         /* ============================================
            TESTIMONIALS SECTION
            ============================================ */
@@ -447,6 +514,7 @@
             color: var(--color-accent);
             font-size: 18px;
             margin-bottom: 15px;
+            aria-label: "5 out of 5 stars";
         }
 
         .testimonial-text {
@@ -461,6 +529,40 @@
             font-weight: 600;
             color: var(--color-text);
             font-size: 15px;
+        }
+
+        /* ============================================
+           WHATSAPP CTA
+           ============================================ */
+
+        .whatsapp-cta {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-cta:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-cta:focus {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
         }
 
         /* ============================================
@@ -579,6 +681,14 @@
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
+
+            .whatsapp-cta {
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+                font-size: 24px;
+            }
         }
 
         .loading {
@@ -593,50 +703,52 @@
         <div class="logo" id="navBrandName">MK Nails</div>
         <ul class="nav-links">
             <li><a href="#services">Services</a></li>
-            <li><a href="#gallery">Gallery</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <button class="book-btn" id="navBookBtn">Book Now</button>
+        <button class="book-btn" id="navBookBtn" aria-label="Book an appointment now">Book Now</button>
     </nav>
 
     <!-- AVAILABILITY BANNER -->
-    <div class="availability-banner" id="availabilityBanner"></div>
+    <div class="availability-banner" id="availabilityBanner" role="status" aria-live="polite"></div>
 
     <!-- HERO SECTION -->
-    <section class="hero">
+    <section class="hero" aria-label="Welcome section">
         <div class="hero-content">
-            <div class="hero-sparkle">✨ ✨ ✨</div>
+            <div class="hero-sparkle" aria-hidden="true">✨ ✨ ✨</div>
             <h1>Hola Bonita</h1>
             <p>Welcome to Your Moment of Self-Care</p>
             <p class="hero-description" id="heroDescription">
                 You deserve to feel beautiful, inside and out.<br>
                 Let's make your nails tell your story.
             </p>
-            <button class="hero-cta" id="heroCTA">Let's Get Started</button>
+            <button class="hero-cta" id="heroCTA" aria-label="Get started with booking">Let's Get Started</button>
         </div>
     </section>
 
     <!-- KINDNESS QUESTION SECTION -->
-    <section class="kindness-section">
+    <section class="kindness-section" aria-label="Service categories">
         <h2 class="kindness-heading">How can we help you shine today?</h2>
-        <div class="service-categories" id="categoryContainer"></div>
+        <div class="service-categories" id="categoryContainer" role="region" aria-label="Service categories"></div>
     </section>
 
     <!-- SERVICES SECTION -->
-    <section class="services-section" id="services">
+    <section class="services-section" id="services" aria-label="Services offered">
         <h2 class="section-title">Our Services</h2>
-        <div class="services-grid" id="servicesContainer"></div>
+        <div class="services-grid" id="servicesContainer" role="region" aria-label="Available nail services"></div>
     </section>
 
     <!-- TESTIMONIALS SECTION -->
-    <section class="testimonials-section" id="testimonials">
+    <section class="testimonials-section" id="testimonials" aria-label="Customer reviews">
         <h2 class="section-title">What Our Beautiful Clients Say</h2>
-        <div class="testimonials-grid" id="testimonialsContainer"></div>
+        <div class="testimonials-grid" id="testimonialsContainer" role="region" aria-label="Customer testimonials"></div>
     </section>
 
+    <!-- WHATSAPP CTA -->
+    <a href="#" id="whatsappCTA" class="whatsapp-cta" target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp" title="Message us on WhatsApp">💬</a>
+
     <!-- FOOTER -->
-    <footer id="footerSection">
+    <footer id="footerSection" role="contentinfo">
         <div class="footer-content">
             <div class="footer-grid">
                 <div class="footer-section">
@@ -654,7 +766,7 @@
             </div>
             <div class="footer-divider">
                 <p>&copy; 2026 MK Nails. Serving beautiful hands with care. All rights reserved.</p>
-                <p style="margin-top: 10px; font-size: 12px;">Made with 💖 for you</p>
+                <p style="margin-top: 10px; font-size: 12px;">Made with 💖 for you | Developed by <a href="https://github.com/jony277" style="color: var(--color-primary); text-decoration: none;">@jony277</a></p>
             </div>
         </div>
     </footer>
@@ -671,7 +783,6 @@
                 updatePageContent();
             } catch (error) {
                 console.error('⚠️ Error loading config:', error);
-                // Use default fallback
                 useFallbackContent();
             }
         }
@@ -702,6 +813,9 @@
 
             // Update social
             renderSocial();
+
+            // Setup WhatsApp CTA
+            setupWhatsAppCTA();
 
             // Update booking buttons
             setupBookingButtons();
@@ -738,7 +852,7 @@
 
             document.getElementById('categoryContainer').innerHTML = categories.map(cat => `
                 <div class="category-card">
-                    <div class="category-icon">${cat.icon}</div>
+                    <div class="category-icon" aria-hidden="true">${cat.icon}</div>
                     <h3 class="category-name">${cat.name}</h3>
                     <p class="category-description">${cat.description}</p>
                 </div>
@@ -750,7 +864,7 @@
                 const priceDisplay = service.priceMax ? `$${service.price}-${service.priceMax}` : `$${service.price}`;
                 return `
                     <div class="service-card" style="animation: fadeInUp 1s ease-out ${idx * 0.1}s both;">
-                        <div class="service-image" style="background-image: url('${service.image}');"></div>
+                        <div class="service-image" style="background-image: url('${service.image}');" role="img" aria-label="${service.name} service"></div>
                         <div class="service-info">
                             <h3 class="service-name">${service.name}</h3>
                             <p class="service-description">${service.description}</p>
@@ -758,7 +872,7 @@
                                 <span>⏱️ ${service.duration}m</span>
                                 <span class="service-price">${priceDisplay}</span>
                             </div>
-                            <button class="service-btn" onclick="bookService('${service.id}')">Book Now</button>
+                            <button class="service-btn" onclick="bookService('${service.id}')" aria-label="Book ${service.name}">Book Now</button>
                         </div>
                     </div>
                 `;
@@ -766,10 +880,14 @@
         }
 
         function renderTestimonials() {
+            if (!config.features.showTestimonials || config.testimonials.length === 0) {
+                document.querySelector('.testimonials-section').style.display = 'none';
+                return;
+            }
             document.getElementById('testimonialsContainer').innerHTML = config.testimonials.map(testimonial => `
                 <div class="testimonial-card" style="animation: fadeInUp 1s ease-out;">
                     <img src="${testimonial.image}" alt="${testimonial.name}" class="testimonial-avatar">
-                    <div class="testimonial-stars">${'★'.repeat(testimonial.rating)}${'☆'.repeat(5-testimonial.rating)}</div>
+                    <div class="testimonial-stars" aria-label="${testimonial.rating} out of 5 stars">${'★'.repeat(testimonial.rating)}${'☆'.repeat(5-testimonial.rating)}</div>
                     <p class="testimonial-text">"${testimonial.text}"</p>
                     <p class="testimonial-author">— ${testimonial.name}</p>
                 </div>
@@ -782,7 +900,7 @@
                 .map(([day, hours]) => {
                     const dayName = day.charAt(0).toUpperCase() + day.slice(1);
                     const display = hours.open24 ? '24/7 Open' : `${hours.open} - ${hours.close}`;
-                    return `<a href="#" style="display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 8px; cursor: default;">${dayName}: ${display}</a>`;
+                    return `<div style="display: block; color: #ccc; text-decoration: none; font-size: 14px; margin-bottom: 8px;">${dayName}: ${display}</div>`;
                 })
                 .join('');
             document.getElementById('hoursContainer').innerHTML = hoursHtml;
@@ -792,8 +910,7 @@
             document.getElementById('contactContainer').innerHTML = `
                 <a href="tel:${config.business.phone.replace(/\D/g, '')}">📞 ${config.business.phone}</a>
                 <a href="mailto:${config.business.email}">📧 ${config.business.email}</a>
-                <a href="#" style="cursor: default;">📍 ${config.business.address}</a>
-                ${config.social.whatsapp ? `<a href="${config.social.whatsapp}" target="_blank">💬 WhatsApp</a>` : ''}
+                <div style="color: #ccc; font-size: 14px; margin-bottom: 8px;">📍 ${config.business.address}</div>
             `;
         }
 
@@ -805,8 +922,19 @@
             ];
 
             document.getElementById('socialContainer').innerHTML = socials
-                .map(social => `<a href="${social.url}" target="_blank" title="${social.name}">${social.icon}</a>`)
+                .filter(social => social.url)
+                .map(social => `<a href="${social.url}" target="_blank" rel="noopener noreferrer" title="${social.name}" aria-label="Follow us on ${social.name}">${social.icon}</a>`)
                 .join('');
+        }
+
+        function setupWhatsAppCTA() {
+            const whatsappBtn = document.getElementById('whatsappCTA');
+            if (config.social.whatsapp) {
+                whatsappBtn.href = config.social.whatsapp;
+                whatsappBtn.style.display = 'flex';
+            } else {
+                whatsappBtn.style.display = 'none';
+            }
         }
 
         function setupBookingButtons() {
@@ -814,10 +942,10 @@
             document.querySelectorAll('.book-btn, .hero-cta, .service-btn').forEach(btn => {
                 btn.onclick = (e) => {
                     e.preventDefault();
-                    if (config.booking.enabled) {
+                    if (config.booking.enabled && bookingUrl && bookingUrl !== '#booking') {
                         window.open(bookingUrl, '_blank');
                     } else {
-                        alert('Booking system coming soon!');
+                        alert('Booking system is being set up. Please call us at ' + config.business.phone);
                     }
                 };
             });
@@ -825,15 +953,15 @@
 
         function bookService(serviceId) {
             const service = config.services.find(s => s.id === serviceId);
-            if (config.booking.enabled) {
+            if (config.booking.enabled && config.booking.url && config.booking.url !== '#booking') {
                 window.open(config.booking.url, '_blank');
             } else {
-                alert(`Booking for ${service.name} coming soon!`);
+                alert('To book ' + service.name + ', please call us at ' + config.business.phone + ' or message via WhatsApp.');
             }
         }
 
         function useFallbackContent() {
-            console.log('Using fallback content');
+            console.log('Using fallback content - config load failed');
         }
 
         // Initialize on page load
@@ -842,6 +970,7 @@
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
+                if (this.href.endsWith('#') || this.href === window.location.href + '#') return;
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
