@@ -1,0 +1,142 @@
+{
+  "business": {
+    "name": "MK Nails",
+    "tagline": "Hola Bonita - Where Beauty Meets Care",
+    "description": "Premium nail salon specializing in professional manicures, custom nail art, and spa treatments",
+    "phone": "(561) 555-0123",
+    "email": "hello@mknails.com",
+    "address": "Atlantis, Florida",
+    "fullAddress": "123 Your Street, Atlantis, FL 33139",
+    "website": "https://jony277.github.io/MKNails/"
+  },
+  "hours": {
+    "monday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "tuesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "wednesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "thursday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "friday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "saturday": { "open": "10:00 AM", "close": "6:00 PM", "open24": false },
+    "sunday": { "open": "12:00 PM", "close": "5:00 PM", "open24": false },
+    "holidays": []
+  },
+  "services": [
+    {
+      "id": "classic-manicure",
+      "name": "Classic Manicure",
+      "description": "Timeless elegance with professional polish and care",
+      "price": 19,
+      "duration": 25,
+      "icon": "💎",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Hands & Feet"
+    },
+    {
+      "id": "gel-manicure",
+      "name": "Gel Manicure",
+      "description": "Long-lasting color that shines for weeks",
+      "price": 35,
+      "duration": 40,
+      "icon": "✨",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Hands & Feet"
+    },
+    {
+      "id": "nail-art",
+      "name": "Nail Art",
+      "description": "Custom designs that express your unique personality",
+      "price": 45,
+      "duration": 60,
+      "icon": "🎨",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Design & Art"
+    },
+    {
+      "id": "spa-manicure",
+      "name": "Spa Manicure",
+      "description": "Luxurious pampering with hand treatments",
+      "price": 45,
+      "duration": 60,
+      "icon": "💄",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Wellness & Spa"
+    },
+    {
+      "id": "hard-gel-full-set",
+      "name": "Hard Gel Full Set",
+      "description": "Durable, beautiful extensions that last",
+      "price": 85,
+      "duration": 120,
+      "icon": "👑",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Hands & Feet"
+    },
+    {
+      "id": "add-on-services",
+      "name": "Add-On Services",
+      "description": "Enhance your service with extras like treatments",
+      "price": 11,
+      "priceMax": 24,
+      "duration": 15,
+      "icon": "🧴",
+      "image": "https://images.pexels.com/photos/3962283/pexels-photo-3962283.jpeg",
+      "category": "Paint Packages"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Maria García",
+      "text": "Every time I leave MK Nails, I feel like a new person. The care and attention is incredible!",
+      "rating": 5,
+      "image": "https://i.pravatar.cc/150?img=1"
+    },
+    {
+      "name": "Sarah Johnson",
+      "text": "The nail art is phenomenal! My nails always turn heads and last so long.",
+      "rating": 5,
+      "image": "https://i.pravatar.cc/150?img=2"
+    },
+    {
+      "name": "Jessica Lee",
+      "text": "Best salon experience ever. The team made me feel so welcomed and beautiful!",
+      "rating": 5,
+      "image": "https://i.pravatar.cc/150?img=3"
+    }
+  ],
+  "social": {
+    "instagram": "https://instagram.com",
+    "facebook": "https://facebook.com",
+    "tiktok": "https://tiktok.com",
+    "whatsapp": "https://wa.me/15615550123"
+  },
+  "colors": {
+    "primary": "#F5B4C8",
+    "secondary": "#DCC8B4",
+    "accent": "#D2AA6E",
+    "background": "#FAF8F5",
+    "text": "#3C322D",
+    "textLight": "#888888",
+    "success": "#6BBF59",
+    "error": "#E74C3C",
+    "warning": "#F39C12"
+  },
+  "booking": {
+    "enabled": true,
+    "platform": "calendly",
+    "url": "https://calendly.com/your-booking-link",
+    "minAdvanceBooking": 24,
+    "maxAdvanceBooking": 90
+  },
+  "notifications": {
+    "emailNotifications": true,
+    "smsNotifications": false,
+    "whatsappNotifications": true
+  },
+  "features": {
+    "showTestimonials": true,
+    "showGallery": true,
+    "showAvailability": true,
+    "showMap": false,
+    "showChat": false,
+    "enableSearch": true
+  }
+}
