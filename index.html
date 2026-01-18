@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MK Nails - Hola Bonita | Book Your Beauty Moment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary: #F5B4C8;
+            --color-secondary: #DCC8B4;
+            --color-accent: #D2AA6E;
+            --color-background: #FAF8F5;
+            --color-text: #3C322D;
+            --color-text-light: #888888;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-medium: 0 4px 16px rgba(0,0,0,0.12);
+            --border-radius: 14px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: white;
+            box-shadow: var(--shadow-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-accent);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text);
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .book-btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background: #E099B0;
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           HERO SECTION - "HOLA BONITA"
+           ============================================ */
+        
+        .hero {
+            background: linear-gradient(135deg, #FAF8F5 0%, #FFF5F8 100%);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 60px 40px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(245, 180, 200, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-sparkle {
+            font-size: 28px;
+            margin-bottom: 20px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-family: Georgia, serif;
+            color: var(--color-accent);
+            margin: 20px 0;
+            letter-spacing: 2px;
+            font-weight: 400;
+            animation: slideDown 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--color-text-light);
+            margin: 20px 0;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: var(--color-text);
+            margin: 20px 0 40px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .hero-cta {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .hero-cta:hover {
+            background: #E099B0;
+            box-shadow: 0 8px 24px rgba(245, 180, 200, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .hero-cta:active {
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           KINDNESS QUESTION SECTION
+           ============================================ */
+        
+        .kindness-section {
+            padding: 80px 40px;
+            background: white;
+            text-align: center;
+        }
+
+        .kindness-heading {
+            font-size: 48px;
+            font-family: Georgia, serif;
+            color: var(--color-text);
+            margin-bottom: 60px;
+            font-weight: 400;
+        }
+
+        .service-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: var(--color-background);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .category-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .category-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .category-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        .category-description {
+            font-size: 14px;
+            color: var(--color-text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .category-link {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .category-link:hover {
+            color: var(--color-primary);
+        }
+
+        /* ============================================
+           SERVICES SECTION
+           ============================================ */
+        
+        .services-section {
+            padding: 80px 40px;
+            background: var(--color-background);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            font-family: Georgia, serif;
+            color: var(--color-text);
+            margin-bottom: 60px;
+            font-weight: 400;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #FFF5F8 0%, #F5ECFB 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            overflow: hidden;
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+        }
+
+        .service-info {
+            padding: 30px;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 10px;
+            font-family: Georgia, serif;
+        }
+
+        .service-description {
+            font-size: 14px;
+            color: var(--color-text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .service-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #EEE;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--color-text-light);
+        }
+
+        .service-price {
+            font-weight: 600;
+            color: var(--color-accent);
+            font-size: 16px;
+        }
+
+        .service-btn {
+            width: 100%;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .service-btn:hover {
+            background: #E099B0;
+            transform: scale(1.02);
+        }
+
+        /* ============================================
+           TESTIMONIALS SECTION
+           ============================================ */
+        
+        .testimonials-section {
+            padding: 80px 40px;
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--color-background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .testimonial-stars {
+            color: var(--color-accent);
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 15px;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        
+        footer {
+            background: var(--color-text);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: var(--color-primary);
+        }
+
+        .footer-section a {
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-divider {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                min-height: 60vh;
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .kindness-heading {
+                font-size: 32px;
+            }
+
+            .services-section,
+            .kindness-section,
+            .testimonials-section {
+                padding: 60px 20px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .service-categories,
+            .services-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">MK Nails</div>
+        <ul class="nav-links">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <button class="book-btn">Book Now</button>
+    </nav>
+
+    <!-- HERO SECTION: "Hola Bonita" -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-sparkle">✨ ✨ ✨</div>
+            <h1>Hola Bonita</h1>
+            <p>Welcome to Your Moment of Self-Care</p>
+            <p class="hero-description">
+                You deserve to feel beautiful, inside and out.<br>
+                Let's make your nails tell your story.
+            </p>
+            <button class="hero-cta">Let's Get Started</button>
+        </div>
+    </section>
+
+    <!-- KINDNESS QUESTION SECTION -->
+    <section class="kindness-section">
+        <h2 class="kindness-heading">How can we help you shine today?</h2>
+        <div class="service-categories">
+            <div class="category-card">
+                <div class="category-icon">💅</div>
+                <h3 class="category-name">Nails & Manicures</h3>
+                <p class="category-description">Professional services for hands that deserve to shine</p>
+                <a href="#" class="category-link">Explore →</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🎨</div>
+                <h3 class="category-name">Design & Art</h3>
+                <p class="category-description">Custom nail art that tells your unique story</p>
+                <a href="#" class="category-link">Explore →</a>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">✨</div>
+                <h3 class="category-name">Wellness & Spa</h3>
+                <p class="category-description">Treatments that nourish and pamper your hands</p>
+                <a href="#" class="category-link">Explore →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services-section" id="services">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image">💎</div>
+                <div class="service-info">
+                    <h3 class="service-name">Classic Manicure</h3>
+                    <p class="service-description">Timeless elegance with professional polish and care</p>
+                    <div class="service-meta">
+                        <span>25 minutes</span>
+                        <span class="service-price">$19</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">✨</div>
+                <div class="service-info">
+                    <h3 class="service-name">Gel Manicure</h3>
+                    <p class="service-description">Long-lasting color that shines for weeks</p>
+                    <div class="service-meta">
+                        <span>40 minutes</span>
+                        <span class="service-price">$35</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">🎨</div>
+                <div class="service-info">
+                    <h3 class="service-name">Nail Art</h3>
+                    <p class="service-description">Custom designs that express your unique personality</p>
+                    <div class="service-meta">
+                        <span>45-60 minutes</span>
+                        <span class="service-price">$45+</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">💄</div>
+                <div class="service-info">
+                    <h3 class="service-name">Spa Manicure</h3>
+                    <p class="service-description">Luxurious pampering with hand treatments</p>
+                    <div class="service-meta">
+                        <span>60 minutes</span>
+                        <span class="service-price">$45</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">👑</div>
+                <div class="service-info">
+                    <h3 class="service-name">Hard Gel Full Set</h3>
+                    <p class="service-description">Durable, beautiful extensions that last</p>
+                    <div class="service-meta">
+                        <span>90-120 minutes</span>
+                        <span class="service-price">$85</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-image">🧴</div>
+                <div class="service-info">
+                    <h3 class="service-name">Add-On Services</h3>
+                    <p class="service-description">Enhance your service with extras like treatments</p>
+                    <div class="service-meta">
+                        <span>15-30 minutes</span>
+                        <span class="service-price">$11-24</span>
+                    </div>
+                    <button class="service-btn">Book Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section" id="testimonials">
+        <h2 class="section-title">What Our Beautiful Clients Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Every time I leave MK Nails, I feel like a new person. The care and attention is incredible!"
+                </p>
+                <p class="testimonial-author">— Maria García</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "The nail art is phenomenal! My nails always turn heads and last so long."
+                </p>
+                <p class="testimonial-author">— Sarah Johnson</p>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Best salon experience ever. The team made me feel so welcomed and beautiful!"
+                </p>
+                <p class="testimonial-author">— Jessica Lee</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Hours</h3>
+                    <a href="#">Monday - Friday: 10am - 7pm</a>
+                    <a href="#">Saturday: 10am - 6pm</a>
+                    <a href="#">Sunday: 12pm - 5pm</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <a href="tel:">📞 (561) 555-0123</a>
+                    <a href="mailto:">📧 hello@mknails.com</a>
+                    <a href="#">📍 Atlantis, Florida</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <a href="#">Instagram</a>
+                    <a href="#">Facebook</a>
+                    <a href="#">TikTok</a>
+                </div>
+            </div>
+            <div class="footer-divider">
+                <p>&copy; 2026 MK Nails. Serving beautiful hands since 2026. All rights reserved.</p>
+                <p style="margin-top: 10px; font-size: 12px;">Made with 💖 for you</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll and button interactions
+        document.querySelectorAll('.hero-cta, .book-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Smooth scroll to services
+                document.querySelector('#services').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Animate cards on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.service-card, .category-card, .testimonial-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
