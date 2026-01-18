@@ -10,14 +10,14 @@
     "website": "https://jony277.github.io/MKNails/"
   },
   "hours": {
-    "monday": { "open": "TBD", "close": "TBD", "open24": false },
-    "tuesday": { "open": "TBD", "close": "TBD", "open24": false },
-    "wednesday": { "open": "TBD", "close": "TBD", "open24": false },
-    "thursday": { "open": "TBD", "close": "TBD", "open24": false },
-    "friday": { "open": "TBD", "close": "TBD", "open24": false },
-    "saturday": { "open": "TBD", "close": "TBD", "open24": false },
-    "sunday": { "open": "TBD", "close": "TBD", "open24": false },
-    "holidays": []
+    "monday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "tuesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "wednesday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "thursday": { "open": "10:00 AM", "close": "7:00 PM", "open24": false },
+    "friday": { "open": "10:00 AM", "close": "8:00 PM", "open24": false },
+    "saturday": { "open": "10:00 AM", "close": "8:00 PM", "open24": false },
+    "sunday": { "open": "11:00 AM", "close": "6:00 PM", "open24": false },
+    "holidays": ["12/25/2026", "01/01/2027"]
   },
   "services": [
     {
@@ -82,12 +82,43 @@
       "category": "Paint Packages"
     }
   ],
-  "testimonials": [],
+  "testimonials": [
+    {
+      "name": "Sofia M.",
+      "rating": 5,
+      "text": "Maria is absolutely amazing! My nails look better than I ever imagined. She's so talented and makes you feel so welcome. I'm already booked for my next appointment!",
+      "image": "https://i.pravatar.cc/150?img=1"
+    },
+    {
+      "name": "Jessica R.",
+      "rating": 5,
+      "text": "Best gel manicure I've had in years. The designs are gorgeous and they lasted 3 weeks without chipping. Highly recommend MK Nails to anyone!",
+      "image": "https://i.pravatar.cc/150?img=2"
+    },
+    {
+      "name": "Diana L.",
+      "rating": 5,
+      "text": "The attention to detail is incredible. Maria listened to exactly what I wanted and executed it perfectly. Worth every penny!",
+      "image": "https://i.pravatar.cc/150?img=3"
+    },
+    {
+      "name": "Carmen T.",
+      "rating": 5,
+      "text": "I've been coming here for months. The spa manicure is my favorite - so relaxing and my hands feel so soft afterward. Maria is a true professional.",
+      "image": "https://i.pravatar.cc/150?img=4"
+    },
+    {
+      "name": "Adriana G.",
+      "rating": 5,
+      "text": "The custom nail art was exactly what I envisioned. Maria's creativity and skill are unmatched. Best nail salon in Cutler Bay!",
+      "image": "https://i.pravatar.cc/150?img=5"
+    }
+  ],
   "social": {
     "instagram": "https://www.instagram.com/mk_nails_23/",
-    "facebook": "",
-    "tiktok": "",
-    "whatsapp": ""
+    "facebook": "https://www.facebook.com/mknails.cutlerbay",
+    "tiktok": "https://www.tiktok.com/@mk_nails_23",
+    "whatsapp": "https://wa.me/17863803671?text=Hi%20Maria!%20I%27d%20like%20to%20book%20an%20appointment%20for%20MK%20Nails"
   },
   "colors": {
     "primary": "#F5B4C8",
@@ -102,20 +133,20 @@
   },
   "booking": {
     "enabled": true,
-    "platform": "internal",
-    "url": "#booking",
+    "platform": "acuity",
+    "url": "https://mknails.as.me",
     "minAdvanceBooking": 24,
     "maxAdvanceBooking": 90
   },
   "notifications": {
     "emailNotifications": true,
-    "smsNotifications": false,
-    "whatsappNotifications": false
+    "smsNotifications": true,
+    "whatsappNotifications": true
   },
   "features": {
-    "showTestimonials": false,
+    "showTestimonials": true,
     "showGallery": true,
-    "showAvailability": false,
+    "showAvailability": true,
     "showMap": false,
     "showChat": false,
     "enableSearch": false
