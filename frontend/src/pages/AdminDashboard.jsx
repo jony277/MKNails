@@ -22,7 +22,6 @@ export default function AdminDashboard() {
       const userStr = localStorage.getItem('adminUser');
       if (!userStr) return 'Admin';
       const user = JSON.parse(userStr);
-      // Try multiple field names (camelCase and snake_case)
       return user.fullName || user.full_name || user.name || 'Admin';
     } catch (e) {
       return 'Admin';
@@ -40,7 +39,7 @@ export default function AdminDashboard() {
             <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
               <button
                 onClick={() => toggleTheme('light')}
-                className={`px-3 py-1 rounded text-sm font-medium transition ${
+                className={`px-3 py-1.5 rounded text-sm font-medium transition ${
                   theme === 'light'
                     ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -51,7 +50,7 @@ export default function AdminDashboard() {
               </button>
               <button
                 onClick={() => toggleTheme('dark')}
-                className={`px-3 py-1 rounded text-sm font-medium transition ${
+                className={`px-3 py-1.5 rounded text-sm font-medium transition ${
                   theme === 'dark'
                     ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -59,17 +58,6 @@ export default function AdminDashboard() {
                 title="Dark Mode"
               >
                 🌙
-              </button>
-              <button
-                onClick={() => toggleTheme('auto')}
-                className={`px-3 py-1 rounded text-sm font-medium transition ${
-                  theme === 'auto'
-                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-                }`}
-                title="Auto (System Preference)"
-              >
-                🔄
               </button>
             </div>
 
